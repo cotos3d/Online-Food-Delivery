@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "app-template",
+    "slug": "delivery",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package":"com.entregadelivery.Delivery"
+    },
+    "web": {
+      "favicon": "./assets/Logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1db22428-4967-4962-8b39-15edbb079eb5"
+      }
+    },
+    "owner": "cotox",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/1db22428-4967-4962-8b39-15edbb079eb5"
+    }
+  }
+}
