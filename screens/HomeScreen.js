@@ -12,7 +12,6 @@ import {
 import BottomTabNavigator from '../components/BottomTabNavigator';
 import { db } from '../firebaseConfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import CategoryCarousel from '../components/CategoryCarousel';
 import colors from '../colors';
 
 const HomeScreen = ({ navigation }) => {
@@ -94,11 +93,6 @@ const HomeScreen = ({ navigation }) => {
           >
             <Text style={styles.rechargeButtonText}>Recargar</Text>
           </TouchableOpacity>
-        </View>
-
-        {/* Carrusel */}
-        <View style={styles.carouselContainer}>
-          <CategoryCarousel onCategoryPress={(category) => console.log(category.name)} />
         </View>
       </ScrollView>
 
