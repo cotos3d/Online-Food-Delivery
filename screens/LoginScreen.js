@@ -32,7 +32,7 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image source={require('../assets/Logo.png')} style={styles.logo} />
+        <Image source={require('../assets/logo.jpg')} style={styles.logo} />
       </View>
 
       <View style={styles.card}>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF5F5', // rojo claro
     paddingHorizontal: 20,
   },
   logoContainer: {
@@ -91,40 +91,44 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderRadius: 50,
+    borderWidth: 3,
+    borderColor: '#D32F2F',
   },
   card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     width: '100%',
     padding: 25,
-    shadowColor: '#000',
+    shadowColor: '#D32F2F',
     shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.15,
     shadowRadius: 10,
     elevation: 10,
+    borderWidth: 1,
+    borderColor: '#FFCDD2',
   },
   input: {
     height: 50,
-    backgroundColor: '#F6F7FB',
+    backgroundColor: '#FFEBEE',
     borderRadius: 25,
     paddingHorizontal: 20,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#DDDDDD',
+    borderColor: '#FFCDD2',
     fontSize: 16,
-    color: '#000',
+    color: '#B71C1C',
   },
   buttonContainer: {
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#FF4D4D',
+    backgroundColor: '#D32F2F',
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    shadowColor: '#FF4D4D',
+    shadowColor: '#D32F2F',
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 10,
     elevation: 5,
   },
@@ -132,5 +136,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: 18,
+    letterSpacing: 1,
   },
 });

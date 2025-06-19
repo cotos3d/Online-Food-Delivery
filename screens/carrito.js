@@ -160,7 +160,7 @@ export default function CarritoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF5F5',
     padding: 20,
   },
   headerContainer: {
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   backButton: {
-    backgroundColor: '#FF4D4D',
+    backgroundColor: '#D32F2F',
     padding: 10,
     borderRadius: 12,
     alignItems: 'center',
@@ -182,32 +182,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: '#D32F2F',
+    letterSpacing: 1,
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#FFEBEE',
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FFCDD2',
   },
   image: {
     width: 50,
     height: 50,
     borderRadius: 5,
     marginRight: 10,
+    borderWidth: 1,
+    borderColor: '#D32F2F',
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#B71C1C',
   },
   price: {
     fontSize: 14,
-    color: '#FF4D4D',
+    color: '#D32F2F',
   },
   quantity: {
     fontSize: 12,
-    color: '#666',
+    color: '#B71C1C',
+    opacity: 0.8,
   },
   totalContainer: {
     marginTop: 20,
@@ -216,25 +224,27 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#D32F2F',
   },
   payButton: {
-    backgroundColor: '#FF4D4D',
+    backgroundColor: '#D32F2F',
     borderRadius: 20,
     padding: 15,
     alignItems: 'center',
     marginTop: 20,
+    elevation: 2,
   },
   payButtonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 16,
+    letterSpacing: 1,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(211, 47, 47, 0.15)',
   },
   modalContent: {
     backgroundColor: '#FFFFFF',
@@ -242,14 +252,17 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '80%',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFCDD2',
   },
   modalText: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#D32F2F',
   },
   confirmButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#388E3C',
     padding: 10,
     borderRadius: 10,
     width: '100%',
@@ -261,7 +274,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#FF4D4D',
+    backgroundColor: '#D32F2F',
     padding: 10,
     borderRadius: 10,
     width: '100%',

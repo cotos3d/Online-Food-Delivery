@@ -22,12 +22,7 @@ const BottomTabNavigator = ({ navigation }) => {
       <TouchableOpacity style={styles.tabCenter} onPress={() => navigation.navigate('menu')}>
         <FontAwesome name="shopping-bag" size={24} color="white" />
       </TouchableOpacity>
-
-      <TouchableOpacity style={styles.tab} onPress={openLink}>
-        <MaterialIcons name="chat" size={24} color="gray" />
-        <Text style={styles.label}>ChatBot</Text>
-      </TouchableOpacity>
-
+      
       <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('Profile')}>
         <MaterialIcons name="person" size={24} color="gray" />
         <Text style={styles.label}>Profile</Text>
