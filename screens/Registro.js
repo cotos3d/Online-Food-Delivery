@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, Acti
 import appFirebase from '../firebaseConfig';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import colors from '../colors';
 
 const auth = getAuth(appFirebase);
 
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF5F5', // rojo claro
+    backgroundColor: colors.background,
     paddingHorizontal: 20,
   },
   logoContainer: {
@@ -92,48 +93,48 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 50,
     borderWidth: 3,
-    borderColor: '#D32F2F',
+    borderColor: colors.primary,
   },
   card: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.card,
     borderRadius: 20,
     width: '100%',
     padding: 25,
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.15,
     shadowRadius: 10,
     elevation: 10,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   input: {
     height: 50,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     borderRadius: 25,
     paddingHorizontal: 20,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
     fontSize: 16,
-    color: '#B71C1C',
+    color: colors.text,
   },
   buttonContainer: {
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
     elevation: 5,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: '600',
     fontSize: 18,
     letterSpacing: 1,

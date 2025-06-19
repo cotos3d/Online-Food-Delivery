@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import colors from '../colors';
 
 const categories = [
   {
@@ -50,7 +51,7 @@ const CategoryCarousel = () => {
           style={styles.category}
           onPress={() => handlePress(category)}
         >
-          {category.icon('#FF0000')} {/* Cambiado a color rojo */}
+          {category.icon(colors.primary)}
           <Text style={styles.text}>{category.name}</Text>
         </TouchableOpacity>
       ))}
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#FF0000', // Cambiar el texto también a rojo si es necesario
+    color: colors.primary,
   },
 });
 

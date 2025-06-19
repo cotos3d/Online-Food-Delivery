@@ -22,7 +22,7 @@
       "package":"com.entregadelivery.Delivery"
     },
     "web": {
-      "favicon": "./assets/Logo.png"
+      "favicon": "./assets/Logo.jpg"
     },
     "extra": {
       "eas": {

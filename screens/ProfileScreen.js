@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { db } from '../firebaseConfig'; 
 import { doc, getDoc, setDoc } from "firebase/firestore"; 
 import BottomTabNavigator from '../components/BottomTabNavigator';
+import colors from '../colors';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -150,14 +151,14 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
   },
   scrollContent: {
     flexGrow: 1,
     padding: 20,
   },
   backButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 12,
     alignSelf: 'flex-start',
@@ -172,20 +173,20 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#D32F2F',
+    color: colors.primary,
     letterSpacing: 1,
   },
   profileContainer: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     padding: 20,
     borderRadius: 20,
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.12,
     shadowRadius: 10,
     elevation: 5,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   profileImage: {
     width: 100,
@@ -194,34 +195,34 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'center',
     borderWidth: 2,
-    borderColor: '#D32F2F',
+    borderColor: colors.primary,
   },
   label: {
     fontSize: 16,
-    color: '#B71C1C',
+    color: colors.text,
     marginBottom: 8,
   },
   input: {
     height: 50,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
     fontSize: 16,
-    color: '#B71C1C',
+    color: colors.text,
   },
   infoInput: {
     height: 100,
     textAlignVertical: 'top',
   },
   button: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: '600',
     fontSize: 18,
     letterSpacing: 1,

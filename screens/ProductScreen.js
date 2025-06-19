@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { db } from '../firebaseConfig'; 
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import BottomTabNavigator from '../components/BottomTabNavigator';
+import colors from '../colors';
 
 export default function MenuScreen() {
   const navigation = useNavigation();
@@ -93,7 +94,7 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
     padding: 10,
   },
   header: {
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#D32F2F',
+    color: colors.primary,
     letterSpacing: 1,
   },
   list: {
@@ -109,18 +110,18 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     borderRadius: 15,
     padding: 10,
     margin: 10,
     alignItems: 'center',
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.12,
     shadowRadius: 10,
     elevation: 5,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   image: {
     width: 100,
@@ -128,37 +129,37 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 10,
     borderWidth: 2,
-    borderColor: '#D32F2F',
+    borderColor: colors.primary,
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
     textAlign: 'center',
-    color: '#B71C1C',
+    color: colors.text,
   },
   price: {
     fontSize: 14,
-    color: '#D32F2F',
+    color: colors.primary,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
   },
   addButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     borderRadius: 15,
     paddingVertical: 5,
     paddingHorizontal: 15,
     marginTop: 5,
   },
   addButtonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: 'bold',
     fontSize: 14,
     letterSpacing: 1,
   },
   backButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 12,
     alignSelf: 'flex-start',
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   cartButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.card,
     borderRadius: 50,
     width: 70,
     height: 70,
@@ -177,11 +178,11 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
     elevation: 5,
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
     borderWidth: 2,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
 });

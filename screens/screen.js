@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import colors from '../colors'
 
 const screen = () => {
   return (
@@ -14,12 +15,12 @@ export default screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
-    color: '#D32F2F',
+    color: colors.primary,
     fontSize: 24,
     fontWeight: 'bold',
     letterSpacing: 1,

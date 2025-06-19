@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { collection, getDocs, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { db } from '../firebaseConfig';
+import colors from '../colors';
 
 export default function CarritoScreen() {
   const [cartItems, setCartItems] = useState([]);
@@ -160,7 +161,7 @@ export default function CarritoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
     padding: 20,
   },
   headerContainer: {
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   backButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 12,
     alignItems: 'center',
@@ -182,18 +183,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#D32F2F',
+    color: colors.primary,
     letterSpacing: 1,
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   image: {
     width: 50,
@@ -201,20 +202,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight: 10,
     borderWidth: 1,
-    borderColor: '#D32F2F',
+    borderColor: colors.primary,
   },
   name: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#B71C1C',
+    color: colors.text,
   },
   price: {
     fontSize: 14,
-    color: '#D32F2F',
+    color: colors.primary,
   },
   quantity: {
     fontSize: 12,
-    color: '#B71C1C',
+    color: colors.text,
     opacity: 0.8,
   },
   totalContainer: {
@@ -224,10 +225,10 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#D32F2F',
+    color: colors.primary,
   },
   payButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     borderRadius: 20,
     padding: 15,
     alignItems: 'center',
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   payButtonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: 'bold',
     fontSize: 16,
     letterSpacing: 1,
@@ -244,22 +245,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(211, 47, 47, 0.15)',
+    backgroundColor: 'rgba(3, 155, 229, 0.15)',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 20,
     width: '80%',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   modalText: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#D32F2F',
+    color: colors.primary,
   },
   confirmButton: {
     backgroundColor: '#388E3C',
@@ -270,18 +271,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   confirmButtonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 10,
     width: '100%',
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: 'bold',
   },
 });

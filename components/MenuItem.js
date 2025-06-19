@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import colors from '../colors';
 
 const MenuItem = () => {
   return (
@@ -19,9 +20,9 @@ const styles = StyleSheet.create({
     width: 150,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: colors.primaryLight,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1,
@@ -36,12 +37,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: colors.text,
     marginBottom: 5,
   },
   price: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textLight,
     marginBottom: 10,
   },
   button: {
@@ -49,10 +50,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#e91e63',
+    borderColor: colors.primary,
   },
   buttonText: {
-    color: '#e91e63',
+    color: colors.primary,
     fontSize: 14,
   },
 });

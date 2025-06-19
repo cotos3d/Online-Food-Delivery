@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import colors from '../colors';
 
 export default function OrderProcessScreen({ navigation }) {
   const [isProcessing, setIsProcessing] = useState(true); 
@@ -47,7 +48,7 @@ export default function OrderProcessScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -56,11 +57,11 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.4,
     shadowRadius: 10,
@@ -70,19 +71,19 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#D32F2F',
+    color: colors.primary,
     textAlign: 'center',
     letterSpacing: 1,
   },
   subtitle: {
     fontSize: 16,
-    color: '#B71C1C',
+    color: colors.text,
     textAlign: 'center',
     marginBottom: 20,
     letterSpacing: 0.5,
   },
   homeButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
@@ -91,7 +92,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   homeButtonText: {
-    color: '#FFFFFF',
+    color: colors.card,
     fontWeight: 'bold',
     fontSize: 16,
     letterSpacing: 1,

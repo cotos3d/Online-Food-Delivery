@@ -13,6 +13,7 @@ import BottomTabNavigator from '../components/BottomTabNavigator';
 import { db } from '../firebaseConfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import CategoryCarousel from '../components/CategoryCarousel';
+import colors from '../colors';
 
 const HomeScreen = ({ navigation }) => {
   const [walletData, setWalletData] = useState({ coins: 0 });
@@ -80,7 +81,12 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.walletContainer}>
           <View style={styles.walletBox}>
             <Text style={styles.walletLabel}>Tus Monedas</Text>
-            <Text style={styles.walletAmount}>{walletData.coins}</Text>
+            <View style={styles.walletRow}>
+              <Text style={styles.walletAmount}>{walletData.coins}</Text>
+              <TouchableOpacity style={styles.refreshButton} onPress={fetchWalletData}>
+                <Text style={styles.refreshButtonText}>Actualizar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <TouchableOpacity
             style={styles.rechargeButton}
@@ -142,23 +148,31 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </Modal>
        <View style={styles.dishesSection}>
-          <View style={styles.dishBox}>
-            <Text style={styles.dishText}>Consume Pan</Text>
-            <Text style={styles.restaurantCount}>Explora nuestra exquisita variedad de panes frescos y deliciosos.</Text>
-          </View>
-          <View style={[styles.dishBox, styles.redBackground]}>
-            <Text style={styles.dishText}>Postres</Text>
-            <Text style={styles.restaurantCount}>Disfruta de un mundo de sabores con nuestras opciones de comida rápida.</Text>
-          </View>
-          <View style={[styles.dishBox, styles.blueBackground]}>
-            <Text style={styles.dishText}>Comida Rápida</Text>
-            <Text style={styles.restaurantCount}>Disfruta de un mundo de sabores con nuestras opciones de comida rápida.</Text>
-          </View>
-          <View style={[styles.dishBox, styles.greenBackground]}>
-            <Text style={styles.dishText}>Bebidas</Text>
-            <Text style={styles.restaurantCount}>Refresca tu día con nuestras bebidas, siempre deliciosas y sin alcohol.</Text>
-          </View>
+        <View style={styles.dishBox}>
+          <Text style={styles.dishText}>Comida Peruana</Text>
+          <Text style={styles.restaurantCount}>
+            Descubre la riqueza de la gastronomía peruana: ceviche, lomo saltado, ají de gallina y mucho más. ¡Sabores auténticos y tradición en cada plato!
+          </Text>
         </View>
+        <View style={styles.dishBox}>
+          <Text style={styles.dishText}>Postres Peruanos</Text>
+          <Text style={styles.restaurantCount}>
+            Prueba deliciosos postres como suspiro limeño, mazamorra morada y arroz con leche. Dulzura y cultura en cada bocado.
+          </Text>
+        </View>
+        <View style={styles.dishBox}>
+          <Text style={styles.dishText}>Comida Rápida Peruana</Text>
+          <Text style={styles.restaurantCount}>
+            Anticuchos, salchipapas y hamburguesas con un toque peruano. ¡Perfectos para disfrutar en cualquier momento!
+          </Text>
+        </View>
+        <View style={styles.dishBox}>
+          <Text style={styles.dishText}>Bebidas Típicas</Text>
+          <Text style={styles.restaurantCount}>
+            Refresca tu día con chicha morada, emoliente o maracuyá. Bebidas tradicionales y refrescantes, siempre deliciosas.
+          </Text>
+        </View>
+      </View>
 
       <BottomTabNavigator navigation={navigation} />
     </View>
@@ -168,82 +182,100 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5', // Fondo suave rojo claro
+    backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: '#D32F2F', // Rojo fuerte
+    backgroundColor: colors.primary,
     padding: 24,
     paddingTop: 48,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     elevation: 8,
-    shadowColor: '#B71C1C',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 16,
   },
   address: {
-    color: '#fff',
+    color: colors.card,
     fontSize: 13,
     opacity: 0.9,
     letterSpacing: 1,
   },
   addressDetail: {
-    color: '#fff',
+    color: colors.card,
     fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 6,
     letterSpacing: 1,
   },
   searchInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginTop: 14,
     fontSize: 15,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   walletContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 18,
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     marginHorizontal: 18,
     borderRadius: 16,
     marginBottom: 18,
     elevation: 3,
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
     shadowRadius: 6,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   walletBox: {
     alignItems: 'center',
   },
+  walletRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
   walletLabel: {
-    color: '#B71C1C',
+    color: colors.text,
     fontSize: 13,
     marginBottom: 4,
     fontWeight: 'bold',
   },
   walletAmount: {
-    color: '#D32F2F',
+    color: colors.primary,
     fontSize: 18,
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  refreshButton: {
+    backgroundColor: colors.primaryDark,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginLeft: 2,
+  },
+  refreshButtonText: {
+    color: colors.card,
+    fontSize: 13,
     fontWeight: 'bold',
   },
   rechargeButton: {
-    backgroundColor: '#C62828',
+    backgroundColor: colors.primaryDark,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
     elevation: 2,
   },
   rechargeButtonText: {
-    color: '#fff',
+    color: colors.card,
     fontSize: 15,
     fontWeight: 'bold',
     letterSpacing: 1,
@@ -252,32 +284,32 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(211, 47, 47, 0.15)',
+    backgroundColor: 'rgba(3, 155, 229, 0.15)',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     borderRadius: 18,
     padding: 24,
     width: '85%',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 18,
-    color: '#D32F2F',
+    color: colors.primary,
   },
   modalInput: {
     width: '100%',
     padding: 12,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
     borderRadius: 10,
     marginBottom: 16,
     fontSize: 15,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -285,7 +317,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   confirmButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     padding: 12,
     borderRadius: 10,
     alignItems: 'center',
@@ -293,12 +325,12 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   confirmButtonText: {
-    color: '#fff',
+    color: colors.card,
     fontSize: 15,
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#FFCDD2',
+    backgroundColor: colors.border,
     padding: 12,
     borderRadius: 10,
     alignItems: 'center',
@@ -306,7 +338,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   cancelButtonText: {
-    color: '#B71C1C',
+    color: colors.text,
     fontSize: 15,
     fontWeight: 'bold',
   },
@@ -325,11 +357,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 8,
-    backgroundColor: '#E57373',
+    backgroundColor: colors.accent,
     width: '18%',
   },
   actionText: {
-    color: '#fff',
+    color: colors.card,
     fontSize: 12,
     textAlign: 'center',
   },
@@ -341,34 +373,28 @@ const styles = StyleSheet.create({
   },
   dishBox: {
     width: '48%',
-    backgroundColor: '#FF8A80',
+    backgroundColor: colors.card, // Fondo blanco
     borderRadius: 16,
     padding: 18,
     marginBottom: 18,
     justifyContent: 'center',
     elevation: 2,
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
   },
   dishText: {
-    color: '#B71C1C',
+    color: colors.text,
     fontSize: 17,
     fontWeight: 'bold',
     marginBottom: 7,
     letterSpacing: 1,
   },
   restaurantCount: {
-    color: '#B71C1C',
+    color: colors.text,
     fontSize: 13,
     opacity: 0.85,
-  },
-  blueBackground: {
-    backgroundColor: '#FF5252',
-  },
-  greenBackground: {
-    backgroundColor: '#D50000',
   },
 });
 export default HomeScreen;

@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { db } from '../firebaseConfig';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import BottomTabNavigator from '../components/BottomTabNavigator';
+import colors from '../colors';
 
 export default function FavoritesScreen() {
   const [favorites, setFavorites] = useState([]);
@@ -84,11 +85,11 @@ export default function FavoritesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF5F5',
+    backgroundColor: colors.background,
     padding: 20,
   },
   backButton: {
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     padding: 10,
     borderRadius: 12,
     alignSelf: 'flex-start',
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#D32F2F',
+    color: colors.primary,
     letterSpacing: 1,
   },
   list: {
@@ -108,18 +109,18 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#FFEBEE',
+    backgroundColor: colors.primaryLight,
     borderRadius: 10,
     padding: 15,
     marginBottom: 15,
     alignItems: 'center',
-    shadowColor: '#D32F2F',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.08,
     shadowRadius: 10,
     elevation: 3,
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: colors.border,
   },
   image: {
     width: 80,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 15,
     borderWidth: 2,
-    borderColor: '#D32F2F',
+    borderColor: colors.primary,
   },
   infoContainer: {
     flex: 1,
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#B71C1C',
+    color: colors.text,
   },
   description: {
     fontSize: 14,
-    color: '#B71C1C',
+    color: colors.text,
     opacity: 0.8,
   },
   favoriteButton: {
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
   headerLine: {
     height: 2,
-    backgroundColor: '#D32F2F',
+    backgroundColor: colors.primary,
     width: 60,
     alignSelf: 'center',
     marginTop: -10,

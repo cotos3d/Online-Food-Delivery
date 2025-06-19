@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import colors from '../colors';
 
 const FloatingButton = ({ onPress }) => {
   return (
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: 'tomato',
+    backgroundColor: colors.primary,
     width: 70,
     height: 60,
     borderRadius: 30,
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   floatingButtonText: {
-    color: 'white',
+    color: colors.card,
     fontSize: 24,
     fontWeight: 'bold',
   },

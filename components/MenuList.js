@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import colors from '../colors';
 
 const MenuCard = ({ item }) => {
   const [quantity, setQuantity] = useState(0);
@@ -143,12 +144,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: colors.card,
     borderRadius: 12,
     marginBottom: 16,
     padding: 16,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: colors.primaryDark,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -165,11 +166,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
-    color: '#333',
+    color: colors.text,
   },
   description: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textLight,
     marginBottom: 8,
   },
   priceContainer: {
@@ -180,12 +181,12 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: colors.text,
     marginRight: 8,
   },
   originalPrice: {
     fontSize: 14,
-    color: '#999',
+    color: colors.border,
     textDecorationLine: 'line-through',
   },
   imageContainer: {
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.primaryLight,
   },
   favoriteButton: {
     position: 'absolute',
@@ -207,14 +208,14 @@ const styles = StyleSheet.create({
   },
   addButton: {
     borderWidth: 1,
-    borderColor: '#FF4B4B',
+    borderColor: colors.primary,
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 24,
     alignSelf: 'flex-start',
   },
   addButtonText: {
-    color: '#FF4B4B',
+    color: colors.primary,
     fontSize: 14,
     fontWeight: '500',
   },
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   quantityButton: {
     fontSize: 20,
-    color: '#FF4B4B',
+    color: colors.primary,
     paddingHorizontal: 12,
   },
   quantity: {
@@ -234,17 +235,17 @@ const styles = StyleSheet.create({
   noteButton: {
     marginLeft: 16,
     borderWidth: 1,
-    borderColor: '#FF4B4B',
+    borderColor: colors.primary,
     borderRadius: 20,
     paddingVertical: 4,
     paddingHorizontal: 12,
   },
   noteButtonText: {
-    color: '#FF4B4B',
+    color: colors.primary,
     fontSize: 14,
   },
   soldOut: {
-    color: '#999',
+    color: colors.border,
     fontStyle: 'italic',
     marginTop: 8,
   },
@@ -252,13 +253,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 16,
     right: 16,
-    backgroundColor: '#007AFF',
+    backgroundColor: colors.accent,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   discountText: {
-    color: 'white',
+    color: colors.card,
     fontSize: 12,
     fontWeight: '500',
   },
