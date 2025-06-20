@@ -1,142 +1,192 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import appFirebase from '../firebaseConfig'; 
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'; 
-import { useNavigation } from '@react-navigation/native'; 
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Image,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
+} from 'react-native';
+
+import appFirebase from '../firebaseConfig';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 import colors from '../colors';
 
 const auth = getAuth(appFirebase);
 
 export default function Login() {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const logueo = async () => {
     setLoading(true);
+    setSuccessMessage('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      setLoading(false);
+      setSuccessMessage('✅ Usuario autorizado correctamente');
       setTimeout(() => {
-        setLoading(false); 
-        Alert.alert('Iniciando sesión', 'Accediendo');
         navigation.navigate('Home');
-      }, 1500); 
+        setSuccessMessage('');
+      }, 1500);
     } catch (error) {
-      setLoading(false); 
+      setLoading(false);
       console.log(error);
       Alert.alert('Error', error.message);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image source={require('../assets/logo.jpg')} style={styles.logo} />
-      </View>
-
-      <View style={styles.card}>
-        <TextInput
-          placeholder="Correo Electrónico"
-          style={styles.input}
-          onChangeText={(text) => setEmail(text)}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholderTextColor="#a9a9a9"
-        />
-        <TextInput
-          placeholder="Contraseña"
-          style={styles.input}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={true}
-          autoCapitalize="none"
-          placeholderTextColor="#a9a9a9"
-        />
-
-        <View style={styles.buttonContainer}>
-          {loading ? (
-            <ActivityIndicator size="large" color="#FF4D4D" />
-          ) : (
-            <TouchableOpacity style={styles.button} onPress={logueo}>
-              <Text style={styles.buttonText}>Iniciar Sesión</Text>
-            </TouchableOpacity>
-          )}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.logoContainer}>
+          <Image source={require('../assets/logo.jpg')} style={styles.logo} />
         </View>
-      </View>
-      <TouchableOpacity
-    style={{ marginTop: 20 }}
-    onPress={() => navigation.navigate('Registro')}
-  >
-    <Text style={{ color: '#FF4D4D', textAlign: 'center' }}>
-      ¿No tienes una cuenta? Regístrate aquí
-    </Text>
-  </TouchableOpacity>
-    </View>
+
+        <View style={styles.card}>
+          <Text style={styles.title}>Bienvenido</Text>
+
+          <TextInput
+            placeholder="Correo Electrónico"
+            style={styles.input}
+            onChangeText={(text) => setEmail(text)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#aaa"
+          />
+
+          <TextInput
+            placeholder="Contraseña"
+            style={styles.input}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            autoCapitalize="none"
+            placeholderTextColor="#aaa"
+          />
+
+          {successMessage ? (
+            <Text style={styles.successMessage}>{successMessage}</Text>
+          ) : null}
+
+          <View style={styles.buttonContainer}>
+            {loading ? (
+              <ActivityIndicator size="large" color={colors.primary} />
+            ) : (
+              <TouchableOpacity style={styles.button} onPress={logueo}>
+                <Text style={styles.buttonText}>Iniciar Sesión</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={{ marginTop: 25 }}
+          onPress={() => navigation.navigate('Registro')}
+        >
+          <Text style={styles.registerText}>
+            ¿No tienes una cuenta?{' '}
+            <Text style={{ fontWeight: 'bold', color: colors.primary }}>
+              Regístrate aquí
+            </Text>
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.background, // celeste claro
     paddingHorizontal: 20,
+    paddingVertical: 40,
   },
   logoContainer: {
-    marginBottom: 30,
+    marginBottom: 25,
     alignItems: 'center',
   },
   logo: {
-    width: 220,
-    height: 220,
-    borderRadius: 50,
-    borderWidth: 3,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 2,
     borderColor: colors.primary,
   },
   card: {
-    backgroundColor: colors.card,
-    borderRadius: 20,
     width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
     padding: 25,
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.15,
+    elevation: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
     shadowRadius: 10,
-    elevation: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
     height: 50,
-    backgroundColor: colors.primaryLight,
-    borderRadius: 25,
-    paddingHorizontal: 20,
+    backgroundColor: '#f4f4f4',
+    borderRadius: 12,
+    paddingHorizontal: 15,
     marginBottom: 15,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderColor: colors.border,
     fontSize: 16,
-    color: colors.text,
+    color: '#333',
+  },
+  successMessage: {
+    color: 'green',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 12,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 10,
   },
   button: {
     backgroundColor: colors.primary,
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 12,
     alignItems: 'center',
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5,
+    elevation: 3,
   },
   buttonText: {
-    color: colors.card,
+    color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
-    letterSpacing: 1,
+    fontSize: 16,
+  },
+  registerText: {
+    color: '#555',
+    textAlign: 'center',
+    fontSize: 14,
   },
 });

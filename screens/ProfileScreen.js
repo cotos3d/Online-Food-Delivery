@@ -61,91 +61,99 @@ export default function ProfileScreen() {
       Alert.alert('Error', 'No se pudieron guardar los cambios en Firebase.');
     }
   };
+return (
+  <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => navigation.navigate('Home')}
+      >
+        <MaterialIcons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
 
-  return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={() => navigation.navigate('Home')}
-        >
-          <MaterialIcons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>MI PERFIL</Text>
+      </View>
 
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Mi Perfil</Text>
+      {!isEditing ? (
+        <View style={styles.profileContainer}>
+          {imageUrl ? (
+            <Image source={{ uri: imageUrl }} style={styles.profileImage} />
+          ) : (
+            <View style={styles.noImageBox}>
+              <MaterialIcons name="person" size={80} color={colors.border} />
+              <Text style={styles.noImageText}>Sin Imagen</Text>
+            </View>
+          )}
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>NOMBRE</Text>
+            <Text style={styles.fieldValue}>{firstName}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>APELLIDO</Text>
+            <Text style={styles.fieldValue}>{lastName}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>DIRECCIÓN</Text>
+            <Text style={styles.fieldValue}>{address}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>DNI</Text>
+            <Text style={styles.fieldValue}>{dni}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>INFORMACIÓN</Text>
+            <Text style={styles.fieldValue}>{info}</Text>
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+            <Text style={styles.buttonText}>Editar Perfil</Text>
+          </TouchableOpacity>
         </View>
+      ) : (
+        <View style={styles.formContainer}>
+          <Text style={styles.editLabel}>NOMBRE</Text>
+          <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} />
 
-        {!isEditing ? (
-          <View style={styles.profileContainer}>
-            {imageUrl ? (
-              <Image source={{ uri: imageUrl }} style={styles.profileImage} />
-            ) : (
-              <Text style={styles.label}>No se ha proporcionado una imagen</Text>
-            )}
-            <Text style={styles.label}>Nombre: {firstName}</Text>
-            <Text style={styles.label}>Apellido: {lastName}</Text>
-            <Text style={styles.label}>Dirección: {address}</Text>
-            <Text style={styles.label}>DNI: {dni}</Text>
-            <Text style={styles.label}>Información: {info}</Text>
-            
-            <TouchableOpacity 
-              style={styles.button} 
-              onPress={() => setIsEditing(true)}
-            >
-              <Text style={styles.buttonText}>Editar</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.formContainer}>
-            <Text style={styles.label}>Nombre</Text>
-            <TextInput
-              style={styles.input}
-              value={firstName}
-              onChangeText={(text) => setFirstName(text)}
-            />
+          <Text style={styles.editLabel}>APELLIDO</Text>
+          <TextInput style={styles.input} value={lastName} onChangeText={setLastName} />
 
-            <Text style={styles.label}>Apellido</Text>
-            <TextInput
-              style={styles.input}
-              value={lastName}
-              onChangeText={(text) => setLastName(text)}
-            />
+          <Text style={styles.editLabel}>DIRECCIÓN</Text>
+          <TextInput style={styles.input} value={address} onChangeText={setAddress} />
 
-            <Text style={styles.label}>Dirección</Text>
-            <TextInput
-              style={styles.input}
-              value={address}
-              onChangeText={(text) => setAddress(text)}
-            />
+          <Text style={styles.editLabel}>DNI</Text>
+          <TextInput
+            style={styles.input}
+            value={dni}
+            onChangeText={setDni}
+            keyboardType="numeric"
+          />
 
-            <Text style={styles.label}>DNI</Text>
-            <TextInput
-              style={styles.input}
-              value={dni}
-              onChangeText={(text) => setDni(text)}
-              keyboardType="numeric"
-            />
+          <Text style={styles.editLabel}>INFORMACIÓN</Text>
+          <TextInput
+            style={[styles.input, styles.infoInput]}
+            value={info}
+            onChangeText={setInfo}
+            placeholder="Describe brevemente tus gustos e intereses"
+            multiline
+          />
 
-            <Text style={styles.label}>Información</Text>
-            <TextInput
-              style={[styles.input, styles.infoInput]}
-              value={info}
-              onChangeText={(text) => setInfo(text)}
-              placeholder="Describe brevemente tus gustos e intereses"
-              multiline
-            />
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Guardar Cambios</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </ScrollView>
 
-            <TouchableOpacity style={styles.button} onPress={handleSave}>
-              <Text style={styles.buttonText}>Guardar Cambios</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
+    <BottomTabNavigator navigation={navigation} />
+  </View>
+);
 
-      <BottomTabNavigator navigation={navigation} />
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -171,43 +179,83 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     color: colors.primary,
-    letterSpacing: 1,
+    letterSpacing: 1.5,
   },
   profileContainer: {
-    backgroundColor: colors.primaryLight,
+    backgroundColor: '#fff',
     padding: 20,
     borderRadius: 20,
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
     shadowRadius: 10,
-    elevation: 5,
+    elevation: 4,
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 20,
+    alignSelf: 'center',
+    borderWidth: 3,
+    borderColor: colors.primary,
+  },
+  noImageBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  noImageText: {
+    color: colors.text,
+    fontSize: 14,
+    marginTop: 8,
+  },
+  fieldBox: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
     borderWidth: 1,
     borderColor: colors.border,
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
-    alignSelf: 'center',
-    borderWidth: 2,
-    borderColor: colors.primary,
+  fieldLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: colors.primaryDark,
+    letterSpacing: 1,
+    marginBottom: 5,
   },
-  label: {
+  fieldValue: {
     fontSize: 16,
     color: colors.text,
-    marginBottom: 8,
+  },
+  formContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  editLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: colors.primaryDark,
+    marginBottom: 5,
+    letterSpacing: 1,
+    marginTop: 10,
   },
   input: {
     height: 50,
-    backgroundColor: colors.primaryLight,
-    borderRadius: 10,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 12,
     paddingHorizontal: 15,
-    marginBottom: 20,
+    marginBottom: 15,
     borderWidth: 1,
     borderColor: colors.border,
     fontSize: 16,
@@ -219,20 +267,20 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: colors.primary,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 25,
     alignItems: 'center',
+    marginTop: 10,
     shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 10,
-    elevation: 5,
-    marginTop: 10,
+    elevation: 6,
   },
   buttonText: {
-    color: colors.card,
+    color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 16,
     letterSpacing: 1,
   },
 });
