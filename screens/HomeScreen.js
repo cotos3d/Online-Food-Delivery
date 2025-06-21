@@ -154,47 +154,84 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Modal Moderno */}
+      {/* Modal Moderno de Recarga */}
       <Modal
         visible={modalVisible}
         transparent
-        animationType="slide"
+        animationType="fade"
         onRequestClose={() => setModalVisible(false)}
       >
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={styles.modalContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
         >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Recargar Monedas</Text>
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Cantidad a recargar"
-              keyboardType="numeric"
-              value={rechargeAmount}
-              onChangeText={setRechargeAmount}
-              placeholderTextColor="#999"
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Número de tarjeta"
-              keyboardType="numeric"
-              value={cardNumber}
-              onChangeText={setCardNumber}
-              placeholderTextColor="#999"
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.confirmButton} onPress={handleRecharge}>
-                <Text style={styles.confirmButtonText}>Confirmar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.cancelButton}
+          <TouchableOpacity 
+            style={styles.modalBackground}
+            activeOpacity={1}
+            onPress={() => setModalVisible(false)}
+          >
+            <View style={styles.modalContainer}>
+              <TouchableOpacity 
+                style={styles.modalCloseButton}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.cancelButtonText}>Cancelar</Text>
+                <MaterialIcons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+              
+              <View style={styles.modalHeader}>
+                <MaterialIcons name="account-balance-wallet" size={32} color={colors.accent} />
+                <Text style={styles.modalTitle}>Recargar Billetera</Text>
+                <Text style={styles.modalSubtitle}>Ingresa los detalles de pago</Text>
+              </View>
+              
+              <View style={styles.modalBody}>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Cantidad a recargar</Text>
+                  <View style={styles.amountInputContainer}>
+                    <Text style={styles.currencySymbol}>S/</Text>
+                    <TextInput
+                      style={styles.modalInput}
+                      placeholder="0.00"
+                      keyboardType="decimal-pad"
+                      value={rechargeAmount}
+                      onChangeText={setRechargeAmount}
+                      placeholderTextColor="#999"
+                    />
+                  </View>
+                </View>
+                
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Tarjeta de crédito/débito</Text>
+                  <View style={styles.cardInputContainer}>
+                    <MaterialIcons name="credit-card" size={20} color="#666" style={styles.inputIcon} />
+                    <TextInput
+                      style={[styles.modalInput, {paddingLeft: 30}]}
+                      placeholder="1234 5678 9012 3456"
+                      keyboardType="numeric"
+                      value={cardNumber}
+                      onChangeText={(text) => setCardNumber(text.replace(/\s/g, '').replace(/(\d{4})/g, '$1 ').trim())}
+                      maxLength={19}
+                      placeholderTextColor="#999"
+                    />
+                  </View>
+                </View>
+                
+                <View style={styles.cardLogos}>
+                  <MaterialIcons name="payment" size={28} color="#1a1f71" />
+                  <MaterialIcons name="credit-score" size={28} color="#0165a3" />
+                  <MaterialIcons name="attach-money" size={28} color="#ff5f00" />
+                </View>
+              </View>
+              
+              <TouchableOpacity 
+                style={[styles.confirmButton, !(rechargeAmount && cardNumber) && styles.disabledButton]}
+                onPress={handleRecharge}
+                disabled={!(rechargeAmount && cardNumber)}
+              >
+                <Text style={styles.confirmButtonText}>Recargar S/ {rechargeAmount || '0.00'}</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
         </KeyboardAvoidingView>
       </Modal>
 
@@ -309,65 +346,117 @@ const styles = StyleSheet.create({
     fontSize: 13,
     opacity: 0.85,
   },
-  modalContainer: {
+  // Estilos del modal moderno
+  modalOverlay: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    paddingHorizontal: 24,
   },
-  modalContent: {
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
     backgroundColor: colors.card,
-    borderRadius: 20,
+    borderRadius: 24,
+    width: '90%',
+    maxWidth: 400,
     padding: 24,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    zIndex: 1,
+  },
+  modalHeader: {
+    alignItems: 'center',
+    marginBottom: 24,
   },
   modalTitle: {
     fontSize: 22,
+    fontWeight: '700',
+    color: colors.text,
+    marginTop: 12,
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 4,
+  },
+  modalBody: {
+    marginBottom: 24,
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+    fontWeight: '500',
+  },
+  amountInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.border,
+    paddingBottom: 8,
+  },
+  currencySymbol: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: colors.primaryDark,
-    marginBottom: 18,
-    textAlign: 'center',
+    color: colors.text,
+    marginRight: 8,
+  },
+  cardInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.border,
+    paddingBottom: 8,
+  },
+  inputIcon: {
+    position: 'absolute',
+    left: 0,
+    bottom: 12,
   },
   modalInput: {
-    backgroundColor: colors.background,
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 14,
-    fontSize: 15,
+    fontSize: 18,
     color: colors.text,
+    paddingVertical: 8,
+    flex: 1,
   },
-  modalButtons: {
+  cardLogos: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    marginTop: 24,
+    opacity: 0.7,
   },
   confirmButton: {
-    backgroundColor: colors.primary,
-    flex: 1,
-    padding: 12,
-    borderRadius: 10,
-    marginRight: 6,
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    shadowColor: colors.accent,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+    shadowColor: 'transparent',
   },
   confirmButtonText: {
     color: colors.card,
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  cancelButton: {
-    backgroundColor: colors.border,
-    flex: 1,
-    padding: 12,
-    borderRadius: 10,
-    marginLeft: 6,
-  },
-  cancelButtonText: {
-    color: colors.text,
-    textAlign: 'center',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

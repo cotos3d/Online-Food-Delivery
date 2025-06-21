@@ -10,38 +10,76 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  Animated,
+  Easing
 } from 'react-native';
 import appFirebase from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const colors = {
-  background: '#E0F7FA',       // Celeste pastel
-  primary: '#4FC3F7',          // Celeste más fuerte
-  primaryDark: '#0288D1',
-  primaryLight: '#B3E5FC',
+  background: '#F8F9FA',       // Gris muy claro
+  primary: '#4361EE',          // Azul moderno
+  primaryDark: '#3A0CA3',
+  primaryLight: '#4CC9F0',
   card: '#FFFFFF',
-  border: '#81D4FA',
-  text: '#333333',
-  error: '#FF5252',
+  border: '#E9ECEF',
+  text: '#212529',
+  error: '#FF5A5F',
+  success: '#06D6A0',
 };
 
 const auth = getAuth(appFirebase);
 
 export default function Login() {
   const navigation = useNavigation();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [buttonScale] = useState(new Animated.Value(1));
+  const [cardOpacity] = useState(new Animated.Value(0));
+  const [cardPosition] = useState(new Animated.Value(30));
+
+  React.useEffect(() => {
+    // Animación de entrada
+    Animated.parallel([
+      Animated.timing(cardOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardPosition, {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.out(Easing.back(1.2)),
+        useNativeDriver: true,
+      })
+    ]).start();
+  }, []);
+
+  const animateButton = () => {
+    Animated.sequence([
+      Animated.timing(buttonScale, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonScale, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
 
   const logueo = async () => {
+    animateButton();
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setTimeout(() => {
         setLoading(false);
-        Alert.alert('Iniciando sesión', 'Accediendo...');
         navigation.navigate('Home');
       }, 1000);
     } catch (error) {
@@ -51,17 +89,36 @@ export default function Login() {
     }
   };
 
+  const buttonScaleStyle = {
+    transform: [{ scale: buttonScale }],
+  };
+
+  const cardAnimationStyle = {
+    opacity: cardOpacity,
+    transform: [{ translateY: cardPosition }],
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
     >
+      <LinearGradient
+        colors={['#F8F9FA', '#E9ECEF']}
+        style={styles.background}
+      />
+
       <View style={styles.logoContainer}>
-        <Image source={require('../assets/logo.jpg')} style={styles.logo} />
+        <Image 
+          source={require('../assets/logo.jpg')} 
+          style={styles.logo} 
+        />
+        <Text style={styles.appName}>FoodExpress</Text>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.title}>Bienvenido</Text>
+      <Animated.View style={[styles.card, cardAnimationStyle]}>
+        <Text style={styles.title}>Iniciar Sesión</Text>
 
         <TextInput
           placeholder="Correo Electrónico"
@@ -69,7 +126,7 @@ export default function Login() {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
-          placeholderTextColor="#888"
+          placeholderTextColor="#ADB5BD"
         />
         <TextInput
           placeholder="Contraseña"
@@ -77,27 +134,55 @@ export default function Login() {
           onChangeText={setPassword}
           secureTextEntry
           autoCapitalize="none"
-          placeholderTextColor="#888"
+          placeholderTextColor="#ADB5BD"
         />
+
+        <TouchableOpacity style={styles.forgotPassword}>
+          <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+        </TouchableOpacity>
 
         <View style={styles.buttonContainer}>
           {loading ? (
-            <ActivityIndicator size="large" color={colors.primaryDark} />
+            <ActivityIndicator size="large" color={colors.primary} />
           ) : (
-            <TouchableOpacity style={styles.button} onPress={logueo}>
-              <Text style={styles.buttonText}>Iniciar Sesión</Text>
-            </TouchableOpacity>
+            <Animated.View style={buttonScaleStyle}>
+              <TouchableOpacity 
+                style={styles.button} 
+                onPress={logueo}
+                activeOpacity={0.8}
+              >
+                <LinearGradient
+                  colors={[colors.primary, colors.primaryDark]}
+                  style={styles.gradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                >
+                  <Text style={styles.buttonText}>Iniciar Sesión</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </Animated.View>
           )}
         </View>
 
+        <View style={styles.dividerContainer}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>o</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
         <TouchableOpacity
-          style={{ marginTop: 20 }}
+          style={styles.registerButton}
           onPress={() => navigation.navigate('Registro')}
+          activeOpacity={0.6}
         >
           <Text style={styles.registerText}>
-            ¿No tienes una cuenta? <Text style={{ color: colors.primaryDark }}>Regístrate aquí</Text>
+            Crear una nueva cuenta
           </Text>
         </TouchableOpacity>
+      </Animated.View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© 2023 FoodExpress</Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -106,73 +191,134 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   logo: {
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    borderWidth: 4,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
     borderColor: colors.primary,
+  },
+  appName: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: colors.primaryDark,
+    marginTop: 15,
+    letterSpacing: 1,
   },
   card: {
     backgroundColor: colors.card,
-    borderRadius: 20,
+    borderRadius: 25,
     padding: 30,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 8,
+    shadowRadius: 20,
+    elevation: 10,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: '700',
     color: colors.primaryDark,
-    marginBottom: 24,
+    marginBottom: 25,
     textAlign: 'center',
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
   },
   input: {
     height: 50,
-    backgroundColor: colors.primaryLight,
-    borderRadius: 30,
+    backgroundColor: colors.card,
+    borderRadius: 12,
     paddingHorizontal: 20,
     marginBottom: 16,
     borderWidth: 1,
     borderColor: colors.border,
     fontSize: 16,
     color: colors.text,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'Roboto',
+    shadowColor: colors.border,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   buttonContainer: {
     marginTop: 10,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: colors.primary,
-    paddingVertical: 15,
-    borderRadius: 30,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  gradient: {
+    paddingVertical: 16,
     alignItems: 'center',
-    elevation: 4,
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
+    justifyContent: 'center',
   },
   buttonText: {
     color: colors.card,
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: '600',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'Roboto',
+  },
+  forgotPassword: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    width: 40,
+    textAlign: 'center',
+    color: '#ADB5BD',
+    fontSize: 14,
+  },
+  registerButton: {
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 10,
   },
   registerText: {
-    color: '#555',
-    textAlign: 'center',
-    marginTop: 10,
-    fontSize: 14,
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 20,
+    alignSelf: 'center',
+  },
+  footerText: {
+    color: '#ADB5BD',
+    fontSize: 12,
   },
 });

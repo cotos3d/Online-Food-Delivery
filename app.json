@@ -1,11 +1,10 @@
 {
   "expo": {
-    
-    "name": "app-template",
-    "slug": "delivery",
+    "name": "app-expenses",
+    "slug": "app-expenses",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.jpg",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -20,22 +19,22 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package":"com.entregadelivery.Delivery"
+      "package": "com.biaga.appexpenses"
     },
     "web": {
-      "favicon": "./assets/Logo.jpg"
+      "favicon": "./assets/favicon.png"
+    },
+    "expo": {
+      "extra": {
+        "eas": {
+          "projectId": "d35971d3-6c6d-4ae0-8f78-95a6435a860f"
+        }
+      }
     },
     "extra": {
       "eas": {
-        "projectId": "1db22428-4967-4962-8b39-15edbb079eb5"
+        "projectId": "b2f4fe75-df96-463f-b021-e0a07acf2141"
       }
-    },
-    "owner": "cotox",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/1db22428-4967-4962-8b39-15edbb079eb5"
     }
   }
 }
