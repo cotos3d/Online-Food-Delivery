@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "app-template",
+    "name": "Delivery App",
     "slug": "delivery",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logo.jpg",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -12,29 +12,38 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.entregadelivery.delivery"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package":"com.entregadelivery.Delivery"
+      "package": "com.entregadelivery.delivery",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/Logo.jpg"
     },
-    "extra": {
-      "eas": {
-        "projectId": "1db22428-4967-4962-8b39-15edbb079eb5"
-      }
-    },
-    "owner": "cotox",
+    "owner": "biaga",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/1db22428-4967-4962-8b39-15edbb079eb5"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fd9e4a20-673e-4ff3-b204-610b38c7edf4"
+      }
     }
   }
 }
