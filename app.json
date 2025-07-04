@@ -21,29 +21,41 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.entregadelivery.delivery",
-      "versionCode": 1,
       "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION",
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
       "favicon": "./assets/Logo.jpg"
     },
     "owner": "biaga",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
-      "url": "https://u.expo.dev/1db22428-4967-4962-8b39-15edbb079eb5"
+      "url": "https://u.expo.dev/fd9e4a20-673e-4ff3-b204-610b38c7edf4"
     },
     "extra": {
       "eas": {
         "projectId": "fd9e4a20-673e-4ff3-b204-610b38c7edf4"
       }
-    }
+    },
+    "plugins": [
+      "expo-location",
+      "expo-image-picker"
+    ]
   }
 }
