@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { db } from '../firebaseConfig'; 
+import { db } from '../firebaseConfig';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import BottomTabNavigator from '../components/BottomTabNavigator';
 import colors from '../colors';
@@ -31,7 +31,7 @@ export default function MenuScreen() {
 
   const addToCart = async (item) => {
     try {
-      const pedidosCollection = collection(db, 'pedidos'); // Colección "pedidos" en Firestore
+      const pedidosCollection = collection(db, 'pedidos');
       await addDoc(pedidosCollection, {
         nombre: item.nombre,
         precio: item.precio,
@@ -47,142 +47,148 @@ export default function MenuScreen() {
   const renderMenuItem = ({ item }) => (
     <View style={styles.card}>
       <Image source={{ uri: item.imagen }} style={styles.image} />
-      <Text style={styles.name}>{item.nombre}</Text>
-      <Text style={styles.price}>${item.precio}</Text>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => addToCart(item)} // Guardar en Firestore
-      >
-        <Text style={styles.addButtonText}>agregar</Text>
-      </TouchableOpacity>
+      <View style={styles.cardContent}>
+        <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{item.nombre}</Text>
+        <Text style={styles.price}>${item.precio}</Text>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => addToCart(item)}
+        >
+          <Text style={styles.addButtonText}>Agregar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate('Home')}
-        >
-          <MaterialIcons name="arrow-back" size={35} color="white" />
-        </TouchableOpacity>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.navigate('Home')}
+          >
+            <MaterialIcons name="arrow-back" size={28} color="white" />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.cartButton}
-          onPress={() => navigation.navigate('Carrito')} 
-        >
-          <MaterialIcons name="shopping-cart" size={44} color="red" />
-        </TouchableOpacity>
+          <Text style={styles.header}>Menú</Text>
+
+          <TouchableOpacity
+            style={styles.cartButton}
+            onPress={() => navigation.navigate('Carrito')}
+          >
+            <View style={styles.cartIconContainer}>
+              <MaterialIcons name="shopping-cart" size={28} color="white" />
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={menuItems}
+          renderItem={renderMenuItem}
+          keyExtractor={item => item.id}
+          numColumns={2}
+          contentContainerStyle={styles.list}
+          columnWrapperStyle={styles.columnWrapper}
+          showsVerticalScrollIndicator={false}
+        />
+
+        <BottomTabNavigator navigation={navigation} />
       </View>
-
- 
-      <Text style={styles.header}>Menú</Text>
-
-      <FlatList
-        data={menuItems}
-        renderItem={renderMenuItem}
-        keyExtractor={item => item.id}
-        numColumns={2}
-        contentContainerStyle={styles.list}
-      />
-
-      <BottomTabNavigator navigation={navigation} />
-    </View>
+    </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    padding: 10,
+    paddingHorizontal: 16,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+    marginTop: 16,
   },
   header: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+    fontSize: 28,
+    fontWeight: '800',
     color: colors.primary,
-    letterSpacing: 1,
+    textAlign: 'center',
+    flex: 1,
+  },
+  backButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  cartButton: {
+    zIndex: 1,
+  },
+  cartIconContainer: {
+    backgroundColor: colors.primary,
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   list: {
     paddingBottom: 20,
   },
+  columnWrapper: {
+    justifyContent: 'space-between',
+  },
   card: {
-    flex: 1,
-    backgroundColor: colors.primaryLight,
-    borderRadius: 15,
-    padding: 10,
-    margin: 10,
-    alignItems: 'center',
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    elevation: 5,
-    borderWidth: 1,
-    borderColor: colors.border,
+    width: '48%',
+    backgroundColor: 'white',
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginBottom: 10,
-    borderWidth: 2,
-    borderColor: colors.primary,
+    width: '100%',
+    height: 140,
+    resizeMode: 'cover',
+  },
+  cardContent: {
+    padding: 12,
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    textAlign: 'center',
+    fontWeight: '600',
     color: colors.text,
+    marginBottom: 8,
   },
   price: {
-    fontSize: 14,
+    fontSize: 18,
+    fontWeight: '700',
     color: colors.primary,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
+    marginBottom: 12,
   },
   addButton: {
     backgroundColor: colors.primary,
-    borderRadius: 15,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    marginTop: 5,
+    borderRadius: 12,
+    paddingVertical: 8,
+    alignItems: 'center',
   },
   addButtonText: {
-    color: colors.card,
-    fontWeight: 'bold',
+    color: 'white',
+    fontWeight: '600',
     fontSize: 14,
-    letterSpacing: 1,
-  },
-  backButton: {
-    backgroundColor: colors.primary,
-    padding: 10,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  cartButton: {
-    backgroundColor: colors.card,
-    borderRadius: 50,
-    width: 70,
-    height: 70,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    elevation: 5,
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    borderWidth: 2,
-    borderColor: colors.border,
   },
 });

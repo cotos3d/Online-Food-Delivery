@@ -12,7 +12,6 @@ import {
   Platform,
   ScrollView
 } from 'react-native';
-
 import appFirebase from '../firebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
@@ -34,7 +33,7 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setLoading(false);
-      setSuccessMessage('✅ Usuario autorizado correctamente');
+      setSuccessMessage('✅ Acceso concedido');
       setTimeout(() => {
         navigation.navigate('Home');
         setSuccessMessage('');
@@ -55,57 +54,60 @@ export default function Login() {
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.logoContainer}>
-          <Image source={require('../assets/logo.jpg')} style={styles.logo} />
+        <View style={styles.header}>
+          {/* Logo alternativo con icono de texto */}
+          <View style={styles.logoPlaceholder}>
+            <Text style={styles.logoText}>🍔</Text>
+          </View>
+          <Text style={styles.welcomeText}>Bienvenido</Text>
+          <Text style={styles.subtitle}>Inicia sesión para continuar</Text>
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.title}>Bienvenido</Text>
+        <View style={styles.formContainer}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Correo electrónico</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setEmail(text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholderTextColor="#A1A1A1"
+              placeholder="ejemplo@correo.com"
+            />
+          </View>
 
-          <TextInput
-            placeholder="Correo Electrónico"
-            style={styles.input}
-            onChangeText={(text) => setEmail(text)}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            placeholderTextColor="#aaa"
-          />
-
-          <TextInput
-            placeholder="Contraseña"
-            style={styles.input}
-            onChangeText={(text) => setPassword(text)}
-            secureTextEntry
-            autoCapitalize="none"
-            placeholderTextColor="#aaa"
-          />
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputLabel}>Contraseña</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(text) => setPassword(text)}
+              secureTextEntry
+              autoCapitalize="none"
+              placeholderTextColor="#A1A1A1"
+              placeholder="••••••••"
+            />
+          </View>
 
           {successMessage ? (
             <Text style={styles.successMessage}>{successMessage}</Text>
           ) : null}
 
-          <View style={styles.buttonContainer}>
+          <TouchableOpacity 
+            style={[styles.button, loading && styles.buttonDisabled]} 
+            onPress={logueo}
+            disabled={loading}
+          >
             {loading ? (
-              <ActivityIndicator size="large" color={colors.primary} />
+              <ActivityIndicator size="small" color="#FFF" />
             ) : (
-              <TouchableOpacity style={styles.button} onPress={logueo}>
-                <Text style={styles.buttonText}>Iniciar Sesión</Text>
-              </TouchableOpacity>
+              <Text style={styles.buttonText}>Iniciar sesión</Text>
             )}
-          </View>
-        </View>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{ marginTop: 25 }}
-          onPress={() => navigation.navigate('Registro')}
-        >
-          <Text style={styles.registerText}>
-            ¿No tienes una cuenta?{' '}
-            <Text style={{ fontWeight: 'bold', color: colors.primary }}>
-              Regístrate aquí
-            </Text>
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.forgotPassword}>
+            <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -114,79 +116,98 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
+    backgroundColor: '#FFFFFF',
   },
   scrollContainer: {
     flexGrow: 1,
     justifyContent: 'center',
+    paddingHorizontal: 30,
+    paddingVertical: 20,
+  },
+  header: {
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    marginBottom: 40,
   },
-  logoContainer: {
-    marginBottom: 25,
+  logoPlaceholder: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#F5F5F5',
+    justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 20,
   },
-  logo: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    borderWidth: 2,
-    borderColor: colors.primary,
+  logoText: {
+    fontSize: 40,
   },
-  card: {
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 25,
-    elevation: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-  },
-  title: {
+  welcomeText: {
     fontSize: 24,
     fontWeight: '700',
     color: colors.text,
-    marginBottom: 20,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#7D7D7D',
     textAlign: 'center',
+  },
+  formContainer: {
+    width: '100%',
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: colors.text,
+    marginBottom: 8,
+    fontWeight: '500',
   },
   input: {
     height: 50,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: '#F8F8F8',
     borderRadius: 12,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    borderColor: '#ddd',
-    borderWidth: 1,
+    paddingHorizontal: 16,
     fontSize: 16,
     color: '#333',
-  },
-  successMessage: {
-    color: 'green',
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  buttonContainer: {
-    marginTop: 10,
+    borderWidth: 1,
+    borderColor: '#EAEAEA',
   },
   button: {
     backgroundColor: colors.primary,
-    paddingVertical: 15,
+    height: 50,
     borderRadius: 12,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 10,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
     elevation: 3,
   },
+  buttonDisabled: {
+    opacity: 0.7,
+  },
   buttonText: {
-    color: '#fff',
+    color: '#FFF',
     fontWeight: '600',
     fontSize: 16,
   },
-  registerText: {
-    color: '#555',
-    textAlign: 'center',
+  successMessage: {
+    color: colors.success,
     fontSize: 14,
+    textAlign: 'center',
+    marginVertical: 15,
+    fontWeight: '500',
+  },
+  forgotPassword: {
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  forgotPasswordText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
