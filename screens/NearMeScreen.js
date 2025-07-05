@@ -1,28 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Animated,
-  Dimensions
+import {View,Text,FlatList,StyleSheet,Image,TouchableOpacity,
 } from 'react-native';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; 
 import { db } from '../firebaseConfig';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import BottomTabNavigator from '../components/BottomTabNavigator';
 import colors from '../colors';
 
-const { width } = Dimensions.get('window');
-
 export default function FavoritesScreen() {
   const [favorites, setFavorites] = useState([]);
-  const navigation = useNavigation();
-  const scrollY = new Animated.Value(0);
-
+  const navigation = useNavigation(); 
   const fetchFavorites = async () => {
     try {
       const favoritesCollection = collection(db, 'favoritos');
@@ -40,8 +29,7 @@ export default function FavoritesScreen() {
   const removeFromFavorites = async (favoriteId) => {
     try {
       await deleteDoc(doc(db, 'favoritos', favoriteId));
-      setFavorites((prev) => prev.filter((item) => item.id !== favoriteId));
-      Alert.alert('Eliminado', 'El restaurante se ha eliminado de favoritos');
+      setFavorites((prev) => prev.filter((item) => item.id !== favoriteId)); 
     } catch (error) {
       console.error('Error al eliminar favorito:', error);
     }
@@ -51,244 +39,125 @@ export default function FavoritesScreen() {
     fetchFavorites();
   }, []);
 
-  const renderFavorite = ({ item, index }) => {
-    const inputRange = [
-      -1,
-      0,
-      120 * index,
-      120 * (index + 2)
-    ];
-    
-    const scale = scrollY.interpolate({
-      inputRange,
-      outputRange: [1, 1, 1, 0]
-    });
+  const renderFavorite = ({ item }) => (
+    <View style={styles.card}>
+      <Image source={{ uri: item.image }} style={styles.image} />
 
-    return (
-      <Animated.View style={[styles.card, { transform: [{ scale }] }]}>
-        <Image 
-          source={{ uri: item.image }} 
-          style={styles.image} 
-          resizeMode="cover"
-        />
+      <View style={styles.infoContainer}>
+        <Text style={styles.restaurantName}>{item.name}</Text>
+        <Text style={styles.description}>{item.description}</Text>
+      </View>
 
-        <View style={styles.infoContainer}>
-          <Text style={styles.restaurantName} numberOfLines={1}>{item.name}</Text>
-          <View style={styles.ratingContainer}>
-            <FontAwesome name="star" size={14} color="#FFD700" />
-            <Text style={styles.ratingText}>4.8</Text>
-          </View>
-          <Text style={styles.description} numberOfLines={2}>{item.description}</Text>
-          <View style={styles.tagsContainer}>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>$$</Text>
-            </View>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>15-30 min</Text>
-            </View>
-          </View>
-        </View>
-
-        <TouchableOpacity
-          onPress={() => removeFromFavorites(item.id)}
-          style={styles.favoriteButton}
-          activeOpacity={0.7}
-        >
-          <FontAwesome name="heart" size={24} color={colors.primary} />
-        </TouchableOpacity>
-      </Animated.View>
-    );
-  };
+      <TouchableOpacity
+        onPress={() => removeFromFavorites(item.id)}
+        style={styles.favoriteButton}
+      >
+        <FontAwesome name="heart" size={24} color="red" />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-          activeOpacity={0.7}
-        >
-          <MaterialIcons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Mis Favoritos</Text>
-        <View style={styles.headerIcon}>
-          <FontAwesome name="heart" size={20} color="white" />
-        </View>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <MaterialIcons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Mis Favoritos</Text>
+        <View style={styles.headerLine} />
       </View>
 
-      {/* Contenido */}
-      <Animated.FlatList
+      <FlatList
         data={favorites}
         renderItem={renderFavorite}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true }
-        )}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <FontAwesome name="heart-o" size={60} color="#ccc" />
-            <Text style={styles.emptyText}>No tienes favoritos aún</Text>
-            <Text style={styles.emptySubtext}>Guarda tus restaurantes favoritos aquí</Text>
-            <TouchableOpacity 
-              style={styles.exploreButton}
-              onPress={() => navigation.navigate('Home')}
-            >
-              <Text style={styles.exploreButtonText}>Explorar restaurantes</Text>
-            </TouchableOpacity>
-          </View>
-        }
       />
 
       <BottomTabNavigator navigation={navigation} />
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.primary,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    marginBottom: 10,
+    backgroundColor: colors.background,
+    padding: 20,
   },
   backButton: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    backgroundColor: colors.primary,
+    padding: 10,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 20,
   },
-  headerTitle: {
-    fontSize: 20,
+  header: {
+    fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
-    letterSpacing: 0.5,
-  },
-  headerIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 20,
+    color: colors.primary,
+    letterSpacing: 1,
   },
   list: {
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    paddingBottom: 80,
+    paddingBottom: 20,
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 15,
+    backgroundColor: colors.primaryLight,
+    borderRadius: 10,
     padding: 15,
     marginBottom: 15,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
+    shadowColor: colors.primaryDark,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.08,
     shadowRadius: 10,
-    elevation: 2,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   image: {
-    width: 90,
-    height: 90,
-    borderRadius: 12,
+    width: 80,
+    height: 80,
+    borderRadius: 10,
     marginRight: 15,
+    borderWidth: 2,
+    borderColor: colors.primary,
   },
   infoContainer: {
     flex: 1,
-    justifyContent: 'center',
   },
   restaurantName: {
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#333',
+    color: colors.text,
   },
   description: {
-    fontSize: 13,
-    color: '#666',
-    marginBottom: 8,
-    lineHeight: 18,
+    fontSize: 14,
+    color: colors.text,
+    opacity: 0.8,
   },
   favoriteButton: {
-    padding: 8,
-    alignSelf: 'flex-start',
+    marginLeft: 10,
   },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
+  headerContainer: {
+    marginBottom: 10,
   },
-  ratingText: {
-    fontSize: 13,
-    color: '#666',
-    marginLeft: 5,
-  },
-  tagsContainer: {
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  tag: {
-    backgroundColor: '#F0F0F0',
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginRight: 8,
-  },
-  tagText: {
-    fontSize: 12,
-    color: '#666',
-  },
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 40,
-  },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#555',
-    marginTop: 20,
-    marginBottom: 5,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#888',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  exploreButton: {
+  headerLine: {
+    height: 2,
     backgroundColor: colors.primary,
-    paddingHorizontal: 25,
-    paddingVertical: 12,
-    borderRadius: 25,
-  },
-  exploreButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
+    width: 60,
+    alignSelf: 'center',
+    marginTop: -10,
+    marginBottom: 10,
+    borderRadius: 2,
   },
 });
+

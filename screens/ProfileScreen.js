@@ -9,305 +9,280 @@ import colors from '../colors';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    address: '',
-    dni: '',
-    info: '',
-    imageUrl: ''
-  });
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [dni, setDni] = useState('');
+  const [info, setInfo] = useState('');
+  const [imageUrl, setImageUrl] = useState(''); 
   const [isEditing, setIsEditing] = useState(false);
 
   const fetchUserData = async () => {
     try {
       const docRef = doc(db, "users", "userProfile");
       const docSnap = await getDoc(docRef);
+
       if (docSnap.exists()) {
-        setUserData(docSnap.data());
+        const data = docSnap.data();
+        setFirstName(data.firstName || '');
+        setLastName(data.lastName || '');
+        setAddress(data.address || '');
+        setDni(data.dni || '');
+        setInfo(data.info || '');
+        setImageUrl(data.imageUrl || ''); 
+      } else {
+        console.log("No se encontró el documento");
       }
     } catch (error) {
       console.error("Error al obtener los datos: ", error);
     }
   };
 
-  useEffect(() => { fetchUserData(); }, []);
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   const handleSave = async () => {
     try {
-      await setDoc(doc(db, "users", "userProfile"), userData);
-      setIsEditing(false);
-      Alert.alert('Perfil actualizado', 'Tus cambios se guardaron correctamente');
+      await setDoc(doc(db, "users", "userProfile"), {
+        firstName,
+        lastName,
+        address,
+        dni,
+        info,
+        imageUrl, 
+      });
+
+      setIsEditing(false); 
+      Alert.alert('Guardado', 'Los cambios se han guardado correctamente en Firebase.');
     } catch (error) {
-      Alert.alert('Error', 'No se pudieron guardar los cambios');
+      console.error("Error al guardar en Firestore: ", error);
+      Alert.alert('Error', 'No se pudieron guardar los cambios en Firebase.');
     }
   };
+return (
+  <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContent}>
+      <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={() => navigation.navigate('Home')}
+      >
+        <MaterialIcons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
 
-  const handleChange = (name, value) => {
-    setUserData(prev => ({ ...prev, [name]: value }));
-  };
+      <View style={styles.header}>
+        <Text style={styles.headerText}>MI PERFIL</Text>
+      </View>
 
-  return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <TouchableOpacity 
-            style={styles.backButton} 
-            onPress={() => navigation.goBack()}
-          >
-            <MaterialIcons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Mi Perfil</Text>
-          <View style={{ width: 24 }} /> {/* Spacer para alinear el título */}
-        </View>
-
-        <View style={styles.profileCard}>
-          {/* Avatar Section */}
-          <View style={styles.avatarContainer}>
-            {userData.imageUrl ? (
-              <Image source={{ uri: userData.imageUrl }} style={styles.avatar} />
-            ) : (
-              <View style={styles.avatarPlaceholder}>
-                <MaterialIcons name="person" size={48} color={colors.primaryLight} />
-              </View>
-            )}
-            {isEditing && (
-              <TouchableOpacity style={styles.editPhotoButton}>
-                <MaterialIcons name="edit" size={20} color="white" />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {!isEditing ? (
-            <View style={styles.infoContainer}>
-              <ProfileField label="Nombre" value={userData.firstName} />
-              <ProfileField label="Apellido" value={userData.lastName} />
-              <ProfileField label="Dirección" value={userData.address} />
-              <ProfileField label="DNI" value={userData.dni} />
-              <ProfileField label="Sobre mí" value={userData.info} multiline />
-              
-              <TouchableOpacity 
-                style={styles.primaryButton}
-                onPress={() => setIsEditing(true)}
-              >
-                <Text style={styles.buttonText}>Editar Perfil</Text>
-              </TouchableOpacity>
-            </View>
+      {!isEditing ? (
+        <View style={styles.profileContainer}>
+          {imageUrl ? (
+            <Image source={{ uri: imageUrl }} style={styles.profileImage} />
           ) : (
-            <View style={styles.formContainer}>
-              <FormField 
-                label="Nombre"
-                value={userData.firstName}
-                onChangeText={(text) => handleChange('firstName', text)}
-              />
-              <FormField 
-                label="Apellido"
-                value={userData.lastName}
-                onChangeText={(text) => handleChange('lastName', text)}
-              />
-              <FormField 
-                label="Dirección"
-                value={userData.address}
-                onChangeText={(text) => handleChange('address', text)}
-              />
-              <FormField 
-                label="DNI"
-                value={userData.dni}
-                onChangeText={(text) => handleChange('dni', text)}
-                keyboardType="numeric"
-              />
-              <FormField 
-                label="Sobre mí"
-                value={userData.info}
-                onChangeText={(text) => handleChange('info', text)}
-                multiline
-              />
-              
-              <View style={styles.buttonGroup}>
-                <TouchableOpacity 
-                  style={styles.secondaryButton}
-                  onPress={() => setIsEditing(false)}
-                >
-                  <Text style={[styles.buttonText, {color: colors.primary}]}>Cancelar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.primaryButton}
-                  onPress={handleSave}
-                >
-                  <Text style={styles.buttonText}>Guardar Cambios</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.noImageBox}>
+              <MaterialIcons name="person" size={80} color={colors.border} />
+              <Text style={styles.noImageText}>Sin Imagen</Text>
             </View>
           )}
-        </View>
-      </ScrollView>
 
-      <BottomTabNavigator navigation={navigation} />
-    </View>
-  );
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>NOMBRE</Text>
+            <Text style={styles.fieldValue}>{firstName}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>APELLIDO</Text>
+            <Text style={styles.fieldValue}>{lastName}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>DIRECCIÓN</Text>
+            <Text style={styles.fieldValue}>{address}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>DNI</Text>
+            <Text style={styles.fieldValue}>{dni}</Text>
+          </View>
+
+          <View style={styles.fieldBox}>
+            <Text style={styles.fieldLabel}>INFORMACIÓN</Text>
+            <Text style={styles.fieldValue}>{info}</Text>
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+            <Text style={styles.buttonText}>Editar Perfil</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.formContainer}>
+          <Text style={styles.editLabel}>NOMBRE</Text>
+          <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} />
+
+          <Text style={styles.editLabel}>APELLIDO</Text>
+          <TextInput style={styles.input} value={lastName} onChangeText={setLastName} />
+
+          <Text style={styles.editLabel}>DIRECCIÓN</Text>
+          <TextInput style={styles.input} value={address} onChangeText={setAddress} />
+
+          <Text style={styles.editLabel}>DNI</Text>
+          <TextInput
+            style={styles.input}
+            value={dni}
+            onChangeText={setDni}
+            keyboardType="numeric"
+          />
+
+          <Text style={styles.editLabel}>INFORMACIÓN</Text>
+          <TextInput
+            style={[styles.input, styles.infoInput]}
+            value={info}
+            onChangeText={setInfo}
+            placeholder="Describe brevemente tus gustos e intereses"
+            multiline
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Guardar Cambios</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </ScrollView>
+
+    <BottomTabNavigator navigation={navigation} />
+  </View>
+);
+
 }
 
-// Componentes reutilizables
-const ProfileField = ({ label, value, multiline = false }) => (
-  <View style={styles.fieldContainer}>
-    <Text style={styles.fieldLabel}>{label}</Text>
-    <Text style={styles.fieldValue} numberOfLines={multiline ? null : 1}>
-      {value || 'No especificado'}
-    </Text>
-  </View>
-);
-
-const FormField = ({ label, value, onChangeText, ...props }) => (
-  <View style={styles.fieldContainer}>
-    <Text style={styles.fieldLabel}>{label}</Text>
-    <TextInput
-      style={[styles.input, props.multiline && styles.multilineInput]}
-      value={value}
-      onChangeText={onChangeText}
-      placeholderTextColor="#999"
-      {...props}
-    />
-  </View>
-);
-
-// Estilos modernizados
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: colors.background,
   },
   scrollContent: {
-    paddingBottom: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: 40,
+    flexGrow: 1,
+    padding: 20,
   },
   backButton: {
     backgroundColor: colors.primary,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 30,
   },
   headerText: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.primaryDark,
-    letterSpacing: 0.5,
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: colors.primary,
+    letterSpacing: 1.5,
   },
-  profileCard: {
-    backgroundColor: 'white',
-    marginHorizontal: 16,
-    borderRadius: 24,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
-  },
-  avatarContainer: {
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 4,
-    borderColor: colors.primaryLight,
-  },
-  avatarPlaceholder: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#f0f4ff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 4,
-    borderColor: colors.primaryLight,
-  },
-  editPhotoButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 30,
-    backgroundColor: colors.primary,
-    width: 40,
-    height: 40,
+  profileContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
     borderRadius: 20,
-    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 20,
+    alignSelf: 'center',
+    borderWidth: 3,
+    borderColor: colors.primary,
+  },
+  noImageBox: {
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'white',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
-  infoContainer: {
+  noImageText: {
+    color: colors.text,
+    fontSize: 14,
     marginTop: 8,
   },
-  formContainer: {
-    marginTop: 8,
-  },
-  fieldContainer: {
-    marginBottom: 16,
+  fieldBox: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   fieldLabel: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#6c757d',
-    marginBottom: 6,
-    letterSpacing: 0.5,
+    fontWeight: 'bold',
+    color: colors.primaryDark,
+    letterSpacing: 1,
+    marginBottom: 5,
   },
   fieldValue: {
     fontSize: 16,
-    color: '#343a40',
-    fontWeight: '500',
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 12,
+    color: colors.text,
+  },
+  formContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  editLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: colors.primaryDark,
+    marginBottom: 5,
+    letterSpacing: 1,
+    marginTop: 10,
   },
   input: {
-    fontSize: 16,
-    color: '#343a40',
-    backgroundColor: '#f8f9fa',
+    height: 50,
+    backgroundColor: '#f1f1f1',
     borderRadius: 12,
-    padding: 14,
+    paddingHorizontal: 15,
+    marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#e9ecef',
+    borderColor: colors.border,
+    fontSize: 16,
+    color: colors.text,
   },
-  multilineInput: {
+  infoInput: {
     height: 100,
     textAlignVertical: 'top',
   },
-  primaryButton: {
+  button: {
     backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: 14,
+    paddingVertical: 14,
+    borderRadius: 25,
     alignItems: 'center',
-    marginTop: 24,
-  },
-  secondaryButton: {
-    backgroundColor: 'white',
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: 'center',
-    marginTop: 24,
-    borderWidth: 2,
-    borderColor: colors.primary,
-    flex: 1,
-    marginRight: 8,
-  },
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginTop: 10,
+    shadowColor: colors.primaryDark,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 6,
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: '600',
     fontSize: 16,
+    letterSpacing: 1,
   },
 });
+
+
